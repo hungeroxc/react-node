@@ -22,9 +22,9 @@ ReactDOM.render(
         <Router>
             <div className="ui container">
                 <div className="ui three item menu">
-                    <a href="#" className="item">Home</a>
-                    <a href="#" className="item">Games</a>
-                    <a href="#" className="item">Add New Game</a>
+                    <NavLink to="/" className="item">Home</NavLink>
+                    <NavLink to="/" className="item">Games</NavLink>
+                    <NavLink to="/" className="item">Add New Game</NavLink>
                 </div>
                 <Route path="/" component={App} />
                 <Route path="/games" component={App} />
