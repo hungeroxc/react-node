@@ -1,11 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
+import thunk from 'redux-thunk'
 
 import { createStore, applyMiddleware } from 'redux'
 import rootReducers from './reducers'
 import {composeWithDevTools} from 'redux-devtools-extension'
-import logger from 'redux-logger'
+// import logger from 'redux-logger'
 
 import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom'
 import App from './components/App'
@@ -14,7 +15,7 @@ import GamesPage from './components/GamesPage'
 const store = createStore(
     rootReducers,
     composeWithDevTools(
-        applyMiddleware(logger)
+        applyMiddleware(thunk)
     )
 )
 
