@@ -5,15 +5,14 @@ const app = express()
 const dbUrl = "mongodb://localhost"
 
 mongodb.MongoClient.connect(dbUrl, (err, client) => {
-  if (err) throw err
+    if (err) throw err
 
-  const db = client.db('crud')
+    const db = client.db('crud')
 
-  app.get('/api/games', (req, res) => {
-    db.collection('games').find({}).toArray((err, games) => {
-      res.json({ games })
+    app.get('/api/games', (req, res) => {
+        db.collection('games').find({}).toArray((err, games) => {
+            res.json({ games })
+        })
     })
-  })
-
-  app.listen(8080, () => console.log('Server is running on localhost:8080'))
+    app.listen(5050, () => console.log('Server is running on localhost:5050'))
 })
