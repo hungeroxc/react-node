@@ -1,1 +1,1 @@
-一个基于node+react+redux+reactRouter实现的crud项目
+一个基于mongodb+express+react+redux+reactRouter实现的crud项目
