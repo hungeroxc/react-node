@@ -18,12 +18,23 @@ export const fetchGames = () => {
 
 export const saveGame = gameInfo => {
     return dispatch => {
-        fetch('/api/games', {
+        return fetch('/api/games', {
             method: 'post',
             body: gameInfo,
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        }).then(handleResponse)
+    }
+}
+
+// 结果返回处理
+const handleResponse = (res) => {
+    if(res.ok) {
+        return res.json()
+    } else {
+        let error = new Error(res.statusText)
+        error.res = res
+        throw error
     }
 }

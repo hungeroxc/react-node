@@ -15,8 +15,17 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
         })
     })
 
-    app.post('/api/games', (req, res) => {
-        console.log(res.body)
+    // app.post('/api/games', (req, res) => {
+    //     console.log(res.body)
+    // })
+
+    // 错误处理
+    app.use((req, res) => {
+        res.status(404).json({
+            errors: {
+                global: 'Still working on it. Please try again later than when we implement it'
+            }
+        })
     })
 
     app.listen(port, () => console.log(`Server is running on localhost:${port}`))

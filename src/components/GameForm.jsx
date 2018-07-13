@@ -38,6 +38,11 @@ class GameForm extends Component {
         if(isValid) {
             this.setState({ loading: true })
             this.props.saveGame({title, cover})
+            .then(() => {}, err => {
+                err.res.json().then(({errors}) => {
+                    this.setState({errors, loading: false})
+                })
+            })
         }
     }
 
@@ -46,6 +51,10 @@ class GameForm extends Component {
         return (
             <form onSubmit={this.handleSubmit} className={ classnames('ui', 'form', { loading: this.state.loading }) }>
                 <h1>Add new game</h1>
+
+                { 
+                    !!errors.global && <div className="ui negative message">{errors.global}</div>
+                }
 
                 <div className={classnames('field', {error: !!errors.title})}>
                     <label htmlFor="title">Title</label>
