@@ -14,5 +14,10 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
             res.json({ games })
         })
     })
+
+    app.post('/api/games', (req, res) => {
+        console.log(res.body)
+    })
+
     app.listen(port, () => console.log(`Server is running on localhost:${port}`))
 })
