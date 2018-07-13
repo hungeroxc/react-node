@@ -9,10 +9,9 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
 
     const db = client.db('express-blog')
     app.get('/api/games', (req, res) => {
-        console.log(req)
-        // db.collection('articles').find({}).toArray((err, games) => {
-        //     res.json({ games })
-        // })
+        db.collection('articles').find({}).toArray((err, games) => {
+            res.json({ games })
+        })
     })
     app.listen(5050, () => console.log('Server is running on localhost:5050'))
 })
