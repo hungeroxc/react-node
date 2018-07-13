@@ -10,7 +10,6 @@ class GamesPage extends Component {
     }
 
     render(){
-        console.log(this.props)
         return (
             <div>
                 <GamesList games={ this.props.games }/>
