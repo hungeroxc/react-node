@@ -3,15 +3,16 @@ import mongodb from 'mongodb'
 
 const app = express()
 const dbUrl = "mongodb://localhost"
+const port = 6060
 
 mongodb.MongoClient.connect(dbUrl, (err, client) => {
     if (err) throw err
 
-    const db = client.db('express-blog')
+    const db = client.db('crud')
     app.get('/api/games', (req, res) => {
-        db.collection('articles').find({}).toArray((err, games) => {
+        db.collection('games').find({}).toArray((err, games) => {
             res.json({ games })
         })
     })
-    app.listen(5050, () => console.log('Server is running on localhost:5050'))
+    app.listen(port, () => console.log(`Server is running on localhost:${port}`))
 })
