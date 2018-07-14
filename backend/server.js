@@ -1,9 +1,12 @@
 import express from 'express'
 import mongodb from 'mongodb'
+import bodyParser from 'body-parser'
 
 const app = express()
 const dbUrl = "mongodb://localhost"
 const port = 6060
+// 获取post请求参数的中间件
+app.use(bodyParser.json())
 
 mongodb.MongoClient.connect(dbUrl, (err, client) => {
     if (err) throw err
@@ -15,9 +18,17 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
         })
     })
 
-    // app.post('/api/games', (req, res) => {
-    //     console.log(res.body)
-    // })
+    app.post('/api/games', (req, res) => {
+        const {title, cover} = req.body
+        db.collection('games').insert({title, cover}, (err, result) => {
+            if(err) {
+                res.status(500).json({errors: {global: 'Something went wrong'}})
+            } else {
+                console.log(result.ops)
+                res.json({game: result.ops[0]})
+            }
+        })
+    })
 
     // 错误处理
     app.use((req, res) => {
