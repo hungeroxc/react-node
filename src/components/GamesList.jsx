@@ -1,4 +1,5 @@
 import React from 'react'
+import GameCard from './GameCard'
 
 const GamesList = ({games}) => {
     const emptyMsg = (
@@ -6,7 +7,11 @@ const GamesList = ({games}) => {
     )
 
     const gamesList = (
-        <p>games list</p>
+        <div className="ui four cards">
+            {
+                games.map(game => <GameCard game={game} key={game._id}/>)
+            }
+        </div>
     )
     return (
         <div>

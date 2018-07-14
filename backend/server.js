@@ -24,7 +24,6 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
             if(err) {
                 res.status(500).json({errors: {global: 'Something went wrong'}})
             } else {
-                console.log(result.ops)
                 res.json({game: result.ops[0]})
             }
         })
