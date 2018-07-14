@@ -20,7 +20,7 @@ export const saveGame = gameInfo => {
     return dispatch => {
         return fetch('/api/games', {
             method: 'post',
-            body: gameInfo,
+            body: JSON.stringify(gameInfo),
             headers: {
                 "Content-Type": "application/json"
             }

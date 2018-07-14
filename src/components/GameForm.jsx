@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import {connect} from 'react-redux'
 import {saveGame} from './../actions'
+import {Redirect} from 'react-router-dom'
 
 class GameForm extends Component {
     state = {
         title: '',
         cover: '',
         errors: {},
-        loading: false
+        loading: false,
+        done: false
     }
 
     handleChange = e => {
@@ -38,7 +40,9 @@ class GameForm extends Component {
         if(isValid) {
             this.setState({ loading: true })
             this.props.saveGame({title, cover})
-            .then(() => {}, err => {
+            .then(() => {
+                this.setState({ done: true })
+            }, err => {
                 err.res.json().then(({errors}) => {
                     this.setState({errors, loading: false})
                 })
@@ -47,8 +51,8 @@ class GameForm extends Component {
     }
 
     render(){
-        const {title, cover, errors} = this.state
-        return (
+        const {title, cover, errors, done} = this.state
+        const form = (
             <form onSubmit={this.handleSubmit} className={ classnames('ui', 'form', { loading: this.state.loading }) }>
                 <h1>Add new game</h1>
 
@@ -78,6 +82,13 @@ class GameForm extends Component {
                     <button className="ui primary button">Save</button>
                 </div>
             </form>
+        )
+        return (
+            <div>
+                {
+                    done ? <Redirect to="/games" /> : form
+                }
+            </div>
         )
     }
 }
