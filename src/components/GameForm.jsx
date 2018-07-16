@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import {connect} from 'react-redux'
-import {saveGame} from './../actions'
+import {saveGame, fetchOneGame, editGame} from './../actions'
 import {Redirect} from 'react-router-dom'
 
 class GameForm extends Component {
     state = {
-        title: '',
-        cover: '',
+        _id: this.props.game ? this.props.game._id : '',
+        title: this.props.game ? this.props.game.title : '',
+        cover: this.props.game ? this.props.game.cover : '',
         errors: {},
         loading: false,
         done: false
@@ -30,7 +31,7 @@ class GameForm extends Component {
 
     handleSubmit = e => {
         e.preventDefault()
-        const {title, cover} = this.state
+        const {title, cover, _id} = this.state
         let errors = {}
         if(title.length === 0) errors.title = '不能为空'
         if(cover.length === 0) errors.cover = '不能为空'
@@ -39,22 +40,53 @@ class GameForm extends Component {
         const isValid = Object.keys(errors).length === 0
         if(isValid) {
             this.setState({ loading: true })
-            this.props.saveGame({title, cover})
-            .then(() => {
-                this.setState({ done: true })
-            }, err => {
-                err.res.json().then(({errors}) => {
-                    this.setState({errors, loading: false})
+            if(_id) {
+                this.props.editGame({title, cover, _id})
+                .then(() => {
+                    this.setState({ done: true })
+                }, err => {
+                    err.res.json().then(({errors}) => {
+                        this.setState({errors, loading: false})
+                    })
                 })
+            } else {
+
+                this.props.saveGame({title, cover})
+                .then(() => {
+                    this.setState({ done: true })
+                }, err => {
+                    err.res.json().then(({errors}) => {
+                        this.setState({errors, loading: false})
+                    })
+                })
+            }
+        }
+    }
+
+    componentDidMount() {
+        const {match} = this.props
+        if(match.params._id) {
+            this.props.fetchOneGame(match.params._id)
+        }
+    }
+
+    componentDidUpdate(preProps) {
+        if(preProps.game !== this.props.game) {
+            const {_id, title, cover} = this.props.game
+            this.setState({
+                _id,
+                title,
+                cover
             })
         }
     }
 
     render(){
         const {title, cover, errors, done} = this.state
+        const {_id} = this.props.match.params
         const form = (
             <form onSubmit={this.handleSubmit} className={ classnames('ui', 'form', { loading: this.state.loading }) }>
-                <h1>Add new game</h1>
+                <h1>{_id ? 'Edit ' : 'Add new '}game</h1>
 
                 { 
                     !!errors.global && <div className="ui negative message">{errors.global}</div>
@@ -93,4 +125,14 @@ class GameForm extends Component {
     }
 }
 
-export default connect(null, {saveGame})(GameForm)
+const mapStateToProps = (state, props) => {
+    const {match} = props
+    if(match.params._id) {
+        return {
+            game: state.games.find(item => item._id === match.params._id)
+        }
+    }
+    return { game: null }
+}
+
+export default connect(mapStateToProps, {saveGame, fetchOneGame, editGame})(GameForm)

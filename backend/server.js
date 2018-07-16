@@ -29,6 +29,34 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
         })
     })
 
+    // 获取单个game
+    app.get('/api/games/:id', (req, res) => {
+        const {id} = req.params
+        db.collection('games').findOne({_id: new mongodb.ObjectId(id)}, (err, game) => {
+            res.json({game})
+        })
+    })
+
+    // 修改game
+    app.put('/api/games/:id', (req, res) => {
+        const {id} = req.params
+        const {title, cover} = req.body
+        db.collection('games').findOneAndUpdate(
+            {_id: new mongodb.ObjectId(id)},
+            {$set: {title, cover}},
+            {returnOriginal: false},
+            (err, result) => {
+                if(err) {
+                    res.status(500).json({error: {global: err}})
+                    return
+                } else {
+                    res.json({ game: result.value })
+                }
+            }
+        )
+
+    })
+
     // 错误处理
     app.use((req, res) => {
         res.status(404).json({

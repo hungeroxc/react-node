@@ -1,4 +1,4 @@
-import {SET_GAMES, ADD_GAME} from './../constants'
+import {SET_GAMES, ADD_GAME, GAME_FETCHED, UPDATE_GAME} from './../constants'
 
 export const setGames = games => {
     return {
@@ -7,12 +7,34 @@ export const setGames = games => {
     }
 }
 
+export const gameFetched = game => {
+    return {
+        type: GAME_FETCHED,
+        game
+    }
+}
+
+export const updateGame = game => {
+    return {
+        type: UPDATE_GAME,
+        game
+    }
+}
+
 
 export const fetchGames = () => {
     return dispatch => {
-        fetch('/api/games')
+        fetch(`/api/games`)
             .then(res => res.json())
             .then(data => dispatch(setGames(data.games)))
+    }
+}
+
+export const fetchOneGame = id => {
+    return dispatch => {
+        fetch(`/api/games/${id}`)
+        .then(res => res.json())
+        .then(data => dispatch(gameFetched(data.game)))
     }
 }
 
@@ -27,6 +49,21 @@ export const saveGame = gameInfo => {
         })
         .then(handleResponse)
         .then(gameInfo => dispatch(addGame(gameInfo.game)))
+    }
+}
+
+// 编辑游戏信息
+export const editGame = gameInfo => {
+    return dispatch => {
+        return fetch(`/api/games/${gameInfo._id}`, {
+            method: 'put',
+            body: JSON.stringify(gameInfo),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(data => dispatch(updateGame(data.game)))
     }
 }
 
