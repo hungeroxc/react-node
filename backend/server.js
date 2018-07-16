@@ -57,6 +57,18 @@ mongodb.MongoClient.connect(dbUrl, (err, client) => {
 
     })
 
+    // 删除game
+    app.delete('/api/games/:id', (req, res) => {
+        const {id} = req.params
+        db.collection('games').deleteOne({_id: new mongodb.ObjectId(id)}, (err, game) => {
+            if (err) { 
+                res.status(500).json({ errors: { global: err } }) 
+                return 
+            }
+            res.json({})
+        })
+    })
+
     // 错误处理
     app.use((req, res) => {
         res.status(404).json({

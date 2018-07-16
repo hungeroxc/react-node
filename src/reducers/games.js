@@ -1,4 +1,4 @@
-import { SET_GAMES, ADD_GAME, GAME_FETCHED, UPDATE_GAME } from "../constants"
+import { SET_GAMES, ADD_GAME, GAME_FETCHED, UPDATE_GAME, GAME_DELETE } from "../constants"
 
 const games = (state = [], action = {}) => {
     switch(action.type){
@@ -27,7 +27,9 @@ const games = (state = [], action = {}) => {
             const list = [...state]
             list[i] = action.game
             return list
-
+        case GAME_DELETE:
+            const tempList = state.filter(item => item._id !== action.id)
+            return tempList
         default: 
             return state
     }

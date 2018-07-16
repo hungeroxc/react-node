@@ -1,4 +1,11 @@
-import {SET_GAMES, ADD_GAME, GAME_FETCHED, UPDATE_GAME} from './../constants'
+import {SET_GAMES, ADD_GAME, GAME_FETCHED, UPDATE_GAME, GAME_DELETE} from './../constants'
+
+export const addGame = game => {
+    return {
+        type: ADD_GAME,
+        game
+    }
+}
 
 export const setGames = games => {
     return {
@@ -18,6 +25,13 @@ export const updateGame = game => {
     return {
         type: UPDATE_GAME,
         game
+    }
+}
+
+export const gameDeleted = id => {
+    return {
+        type: GAME_DELETE,
+        id
     }
 }
 
@@ -67,12 +81,21 @@ export const editGame = gameInfo => {
     }
 }
 
-export const addGame = game => {
-    return {
-        type: ADD_GAME,
-        game
+// 删除游戏
+export const deleteGame = id => {
+    return dispatch => {
+        return fetch(`/api/games/${id}`, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(handleResponse)
+        .then(data => dispatch(gameDeleted(id)))
     }
 }
+
+
 
 // 结果返回处理
 const handleResponse = (res) => {

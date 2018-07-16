@@ -65,6 +65,7 @@ class GameForm extends Component {
 
     componentDidMount() {
         const {match} = this.props
+        console.log(match)
         if(match.params._id) {
             this.props.fetchOneGame(match.params._id)
         }
